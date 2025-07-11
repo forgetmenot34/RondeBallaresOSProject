@@ -11,6 +11,11 @@ package com.mycompany.rondeballaresosproject;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Test Flight");
+        
+        for(int y = 0 ; y < 10 ; y++)
+        {
+            System.out.println("Test Flight");
+            System.out.println("\n");
+        }
     }
 }
