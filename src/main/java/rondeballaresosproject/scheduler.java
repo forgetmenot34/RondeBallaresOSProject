@@ -8,6 +8,14 @@ package rondeballaresosproject;
  *
  * @author ploba
  */
-public class scheduler {
-    
+import rondeballaresosproject.process;
+import rondeballaresosproject.ganttblock;
+import java.util.List;
+
+public interface scheduler {
+    void setProcesses(List<Process> processes);
+    void simulate();
+    List<ganttblock> getGanttChart();
+    List<Process> getResultProcesses();
+    String getName();
 }

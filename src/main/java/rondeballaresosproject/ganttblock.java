@@ -9,5 +9,18 @@ package rondeballaresosproject;
  * @author ploba
  */
 public class ganttblock {
-    
+     public String processId;
+    public int startTime;
+    public int endTime;
+
+    public GanttBlock(String processId, int startTime, int endTime) {
+        this.processId = processId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + processId + ": " + startTime + "-" + endTime + "]";
+    }
 }

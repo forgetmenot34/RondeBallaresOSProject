@@ -9,5 +9,23 @@ package rondeballaresosproject;
  * @author ploba
  */
 public class process {
-    
+    public String id;
+    public int arrivalTime;
+    public int burstTime;
+    public int startTime;
+    public int finishTime;
+    public int waitingTime;
+    public int turnaroundTime;
+
+    public Process(String id, int arrivalTime, int burstTime) {
+        this.id = id;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Process %s: AT=%d, BT=%d, ST=%d, FT=%d, WT=%d, TAT=%d",
+                id, arrivalTime, burstTime, startTime, finishTime, waitingTime, turnaroundTime);
+    }
 }
