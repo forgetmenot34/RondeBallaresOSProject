@@ -13,7 +13,7 @@ public class ganttblock {
     public int startTime;
     public int endTime;
 
-    public GanttBlock(String processId, int startTime, int endTime) {
+    public ganttblock(String processId, int startTime, int endTime) {
         this.processId = processId;
         this.startTime = startTime;
         this.endTime = endTime;

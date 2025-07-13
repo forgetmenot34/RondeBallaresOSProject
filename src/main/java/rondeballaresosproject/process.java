@@ -8,6 +8,11 @@ package rondeballaresosproject;
  *
  * @author ploba
  */
+import rondeballaresosproject.fcfs;
+import rondeballaresosproject.process;
+import rondeballaresosproject.scheduler;
+import rondeballaresosproject.ganttblock;
+
 public class process {
     public String id;
     public int arrivalTime;
@@ -17,7 +22,7 @@ public class process {
     public int waitingTime;
     public int turnaroundTime;
 
-    public Process(String id, int arrivalTime, int burstTime) {
+    public process(String id, int arrivalTime, int burstTime) {
         this.id = id;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;

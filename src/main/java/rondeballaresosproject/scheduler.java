@@ -13,9 +13,9 @@ import rondeballaresosproject.ganttblock;
 import java.util.List;
 
 public interface scheduler {
-    void setProcesses(List<Process> processes);
+    void setProcesses(List<process> processes);
     void simulate();
     List<ganttblock> getGanttChart();
-    List<Process> getResultProcesses();
+    List<process> getResultProcesses();
     String getName();
 }

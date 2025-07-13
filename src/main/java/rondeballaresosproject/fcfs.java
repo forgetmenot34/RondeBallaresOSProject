@@ -8,33 +8,33 @@ package rondeballaresosproject;
  *
  * @author ploba
  */
-import Model.Process;
-import Model.GanttBlock;
+import rondeballaresosproject.process;
+import rondeballaresosproject.ganttblock;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class FCFS implements Scheduler {
-    private List<Process> processList;
-    private List<GanttBlock> ganttChart;
+public class fcfs implements scheduler {
+    private List<process> processList;
+    private List<ganttblock> ganttchart;
 
-    public FCFS() {
-        this.ganttChart = new ArrayList<>();
+    public fcfs() {
+        this.ganttchart = new ArrayList<>();
     }
 
     @Override
-    public void setProcesses(List<Process> processes) {
+    public void setProcesses(List<process> processes) {
         this.processList = new ArrayList<>(processes);
         this.processList.sort(Comparator.comparingInt(p -> p.arrivalTime));
     }
 
     @Override
     public void simulate() {
-        ganttChart.clear();
+        ganttchart.clear();
         int currentTime = 0;
 
-        for (Process p : processList) {
+        for (process p : processList) {
             if (currentTime < p.arrivalTime) {
                 currentTime = p.arrivalTime;
             }
@@ -44,18 +44,18 @@ public class FCFS implements Scheduler {
             p.waitingTime = p.startTime - p.arrivalTime;
             p.turnaroundTime = p.finishTime - p.arrivalTime;
 
-            ganttChart.add(new GanttBlock(p.id, p.startTime, p.finishTime));
+            ganttchart.add(new ganttblock(p.id, p.startTime, p.finishTime));
             currentTime += p.burstTime;
         }
     }
 
     @Override
-    public List<GanttBlock> getGanttChart() {
-        return ganttChart;
+    public List<ganttblock> getGanttChart() {
+        return ganttchart;
     }
 
     @Override
-    public List<Process> getResultProcesses() {
+    public List<process> getResultProcesses() {
         return processList;
     }
 
