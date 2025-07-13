@@ -18,10 +18,10 @@ import java.util.List;
 public class Main {
         public static void main(String[] args) {
         List<process> processes = Arrays.asList(
-                new process("P1", 0, 4) {},
-                new process("P2", 1, 3),
-                new process("P3", 2, 1),
-                new process("P4", 3, 2)
+                new process("P1", 7, 8) {},
+                new process("P2", 4, 6),
+                new process("P3", 5, 15),
+                new process("P4", 2, 10)
         );
 
         scheduler scheduler = new fcfs();
