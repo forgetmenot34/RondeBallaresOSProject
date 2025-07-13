@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package rondeballaresosproject;
+package FirstComeFirstServe;
 
 /**
  *
@@ -10,8 +10,8 @@ package rondeballaresosproject;
  */
 
 
-import rondeballaresosproject.fcfs;
-import rondeballaresosproject.process;
+import FirstComeFirstServe.fcfs;
+import FirstComeFirstServe.process;
 import java.util.Arrays;
 import java.util.List;
 

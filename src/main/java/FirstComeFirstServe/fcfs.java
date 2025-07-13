@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package rondeballaresosproject;
+package FirstComeFirstServe;
 
 /**
  *
  * @author ploba
  */
-import rondeballaresosproject.process;
-import rondeballaresosproject.ganttblock;
+import FirstComeFirstServe.process;
+import FirstComeFirstServe.ganttblock;
 
 import java.util.ArrayList;
 import java.util.Comparator;

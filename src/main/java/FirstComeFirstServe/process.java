@@ -2,16 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package rondeballaresosproject;
+package FirstComeFirstServe;
 
 /**
  *
  * @author ploba
  */
-import rondeballaresosproject.fcfs;
-import rondeballaresosproject.process;
-import rondeballaresosproject.scheduler;
-import rondeballaresosproject.ganttblock;
+import FirstComeFirstServe.fcfs;
+import FirstComeFirstServe.process;
+import FirstComeFirstServe.scheduler;
+import FirstComeFirstServe.ganttblock;
 
 public class process {
     public String id;
