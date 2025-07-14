@@ -8,8 +8,9 @@ package FirstComeFirstServe;
  *
  * @author ploba
  */
-import FirstComeFirstServe.process;
-import FirstComeFirstServe.ganttblock;
+import functions.scheduler;
+import functions.process;
+import functions.ganttblock;
 
 import java.util.ArrayList;
 import java.util.Comparator;

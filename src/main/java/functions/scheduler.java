@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package FirstComeFirstServe;
+package functions;
 
 /**
  *
  * @author ploba
  */
-import FirstComeFirstServe.process;
-import FirstComeFirstServe.ganttblock;
+import functions.process;
 import java.util.List;
 
 public interface scheduler {

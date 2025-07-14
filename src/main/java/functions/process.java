@@ -2,16 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package FirstComeFirstServe;
+package functions;
 
 /**
  *
  * @author ploba
  */
 import FirstComeFirstServe.fcfs;
-import FirstComeFirstServe.process;
-import FirstComeFirstServe.scheduler;
-import FirstComeFirstServe.ganttblock;
+import functions.process;
 
 public class process {
     public String id;
@@ -21,6 +19,7 @@ public class process {
     public int finishTime;
     public int waitingTime;
     public int turnaroundTime;
+    public int responseTime;
 
     public process(String id, int arrivalTime, int burstTime) {
         this.id = id;
