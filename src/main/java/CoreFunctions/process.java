@@ -9,7 +9,7 @@ package CoreFunctions;
  * @author ploba
  */
 import FirstComeFirstServe.fcfs;
-import CoreFunctions.process;
+import ShortestRemainingTimeFirst.srtf;
 
 public class process {
     public String id;
@@ -20,7 +20,9 @@ public class process {
     public int waitingTime;
     public int turnaroundTime;
     public int responseTime;
-
+    public int remainingTime;
+    public int completionTime;
+    
     public process(String id, int arrivalTime, int burstTime) {
         this.id = id;
         this.arrivalTime = arrivalTime;

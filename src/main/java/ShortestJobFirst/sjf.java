@@ -9,9 +9,9 @@ package ShortestJobFirst;
  * @author ploba
  */
 
-import functions.process;
-import functions.ganttblock;
-import functions.scheduler;
+import CoreFunctions.process;
+import CoreFunctions.ganttblock;
+import CoreFunctions.scheduler;
 
 import java.util.ArrayList;
 import java.util.Comparator;

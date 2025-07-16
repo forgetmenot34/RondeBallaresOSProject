@@ -8,6 +8,3 @@ package RoundRobin;
  *
  * @author ploba
  */
-public class roundrobin {
-    
-}

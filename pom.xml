@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         
-        <exec.mainClass>functions.Main</exec.mainClass>
+        <exec.mainClass>CoreFunctions.Main</exec.mainClass>
        
     </properties>
 </project>

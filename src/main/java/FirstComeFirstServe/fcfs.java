@@ -8,9 +8,9 @@ package FirstComeFirstServe;
  *
  * @author ploba
  */
-import functions.scheduler;
-import functions.process;
-import functions.ganttblock;
+import CoreFunctions.scheduler;
+import CoreFunctions.process;
+import CoreFunctions.ganttblock;
 
 import java.util.ArrayList;
 import java.util.Comparator;
