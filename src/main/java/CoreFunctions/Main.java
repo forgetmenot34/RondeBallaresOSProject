@@ -9,6 +9,7 @@ package CoreFunctions;
  * @author ploba
  */
 
+// MAIN CODE
 
 import FirstComeFirstServe.fcfs;
 import CoreFunctions.ganttblock;
@@ -16,6 +17,7 @@ import CoreFunctions.scheduler;
 
 import ShortestJobFirst.sjf;
 import CoreFunctions.process;
+import RoundRobin.roundrobin;
 import ShortestRemainingTimeFirst.srtf;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +34,8 @@ public class Main {
            System.out.println("1. First Come First Serve (FCFS)");
            System.out.println("2. Shortest Job First (SJF)");
            System.out.println("3. Shortest Remaining Time First (SRTF)");
-           System.out.print("Enter choice (1, 2, or 3): ");
+           System.out.println("3. Round Robin (RR)");
+           System.out.print("Enter choice (1, 2, 3, or 4): ");
            int choice = scanner.nextInt();
 
            System.out.print("Enter number of processes: ");
@@ -61,6 +64,9 @@ public class Main {
                 break;
             case 3:
                 scheduler = new srtf(); 
+                break;
+            case 4:
+                scheduler = new roundrobin();
                 break;
             default:
                 System.out.println("Invalid choice. Defaulting to FCFS.");

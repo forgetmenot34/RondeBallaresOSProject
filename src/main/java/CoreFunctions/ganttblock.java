@@ -8,6 +8,8 @@ package CoreFunctions;
  *
  * @author ploba
  */
+
+//GANTT BLOCK CODE
 public class ganttblock {
      public String processId;
     public int startTime;

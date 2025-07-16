@@ -8,9 +8,8 @@ package CoreFunctions;
  *
  * @author ploba
  */
-import FirstComeFirstServe.fcfs;
-import ShortestRemainingTimeFirst.srtf;
 
+ // PROCESS CODE 
 public class process {
     public String id;
     public int arrivalTime;
@@ -22,6 +21,7 @@ public class process {
     public int responseTime;
     public int remainingTime;
     public int completionTime;
+    public int timeQuantum;
     
     public process(String id, int arrivalTime, int burstTime) {
         this.id = id;
