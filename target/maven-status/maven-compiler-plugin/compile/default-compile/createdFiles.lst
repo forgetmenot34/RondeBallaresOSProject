@@ -1,0 +1,9 @@
+ShortestRemainingTimeFirst\srtf.class
+CoreFunctions\ganttblock.class
+ShortestJobFirst\sjf.class
+CoreFunctions\process.class
+RoundRobin\roundrobin.class
+FirstComeFirstServe\fcfs.class
+CoreFunctions\scheduler.class
+CoreFunctions\Main.class
+MultiLevelFeedbackQueue\mlfq.class
