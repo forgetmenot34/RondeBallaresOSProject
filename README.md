@@ -1,7 +1,9 @@
 Java CPU Scheduler Simulator
 
 Ballares, Dan Paolo B.
+
 Ronde, Richie Noel O.
+
 
 A Java-based CPU Scheduling Simulator with a functional Swing GUI frontend and 
 a complete backend implementation of multiple scheduling algorithms. 
