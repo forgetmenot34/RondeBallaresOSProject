@@ -12,7 +12,6 @@ import RoundRobin.roundrobin;
 import MultiLevelFeedbackQueue.mlfq;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +41,7 @@ public class SchedulerGUI extends JFrame {
 
         JButton addButton = new JButton("Add Process");
         JButton simulateButton = new JButton("Simulate");
+        JButton clearButton = new JButton("Clear");
 
         algorithmCombo.setBackground(Color.WHITE);
         algorithmCombo.setForeground(Color.BLACK);
@@ -49,6 +49,8 @@ public class SchedulerGUI extends JFrame {
         addButton.setForeground(Color.WHITE);
         simulateButton.setBackground(new Color(33, 150, 243));
         simulateButton.setForeground(Color.WHITE);
+        clearButton.setBackground(new Color(244, 67, 54));
+        clearButton.setForeground(Color.WHITE);
 
         JLabel algorithmLabel = new JLabel("Select Algorithm:");
         algorithmLabel.setForeground(Color.WHITE);
@@ -57,6 +59,7 @@ public class SchedulerGUI extends JFrame {
         topPanel.add(algorithmCombo);
         topPanel.add(addButton);
         topPanel.add(simulateButton);
+        topPanel.add(clearButton);
         add(topPanel, BorderLayout.NORTH);
 
         processTableModel = new DefaultTableModel(new Object[]{"Process ID", "Arrival Time", "Burst Time"}, 0);
@@ -93,6 +96,12 @@ public class SchedulerGUI extends JFrame {
         });
 
         simulateButton.addActionListener(e -> runSimulation());
+
+        clearButton.addActionListener(e -> {
+            processTableModel.setRowCount(0);
+            outputArea.setText("");
+            ganttPanel.setGanttChart(new ArrayList<>());
+        });
 
         setVisible(true);
     }
@@ -131,8 +140,18 @@ public class SchedulerGUI extends JFrame {
             case 3 -> {
                 sched = new roundrobin();
                 String tqStr = JOptionPane.showInputDialog(this, "Enter Time Quantum:", "4");
+
+                if (tqStr == null || tqStr.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Time Quantum is required for Round Robin.");
+                    return;
+                }
+
                 try {
-                    int tq = Integer.parseInt(tqStr);
+                    int tq = Integer.parseInt(tqStr.trim());
+                    if (tq <= 0) {
+                        JOptionPane.showMessageDialog(this, "Time Quantum must be a positive integer.");
+                        return;
+                    }
                     for (process p : processes) p.timeQuantum = tq;
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(this, "Invalid Time Quantum.");
