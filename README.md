@@ -108,7 +108,15 @@ MLFQ:
 ![MLFQ sample](https://github.com/user-attachments/assets/a8349514-0fd3-4ff9-98d4-adf8f3dcb712)
 
 
+Issues with code:
+
+When entering Round Robin in the GUI, after entering time quantum in the GUI itself, it goes back to the terminal and asks for the time quantum the user just entered. 
+Other than that, the code works fine.
+
+![Round Robin issues](https://github.com/user-attachments/assets/916ed9a3-b167-437c-872f-7bf127bfa360)
+
 Roles:
 Richie Ronde: Front End
 
 Dan Ballares: Back End
+
