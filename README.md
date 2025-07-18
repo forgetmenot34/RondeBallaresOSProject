@@ -107,13 +107,25 @@ MLFQ:
 
 ![MLFQ sample](https://github.com/user-attachments/assets/a8349514-0fd3-4ff9-98d4-adf8f3dcb712)
 
+Screen shots of run GUI code:
+FCFS:
+<img width="1919" height="1020" alt="Screenshot 2025-07-19 014911" src="https://github.com/user-attachments/assets/a82bb131-29c2-4102-a572-5577aee2045f" />
+
+SJF:
+<img width="1919" height="1016" alt="Screenshot 2025-07-19 014942" src="https://github.com/user-attachments/assets/fc9553d4-e6dd-4a05-9e61-494fd851a85d" />
+
+SRTF:
+<img width="1919" height="1019" alt="Screenshot 2025-07-19 015019" src="https://github.com/user-attachments/assets/e59c6768-55aa-46fd-b4ad-5babaa46bc5f" />
 
 Issues with code:
-
+RR:
 When entering Round Robin in the GUI, after entering time quantum in the GUI itself, it goes back to the terminal and asks for the time quantum the user just entered. 
 Other than that, the code works fine.
 
 ![Round Robin issues](https://github.com/user-attachments/assets/916ed9a3-b167-437c-872f-7bf127bfa360)
+
+MLFQ:
+<img width="1919" height="1024" alt="Screenshot 2025-07-19 015059" src="https://github.com/user-attachments/assets/f301bd41-e5f8-4313-863e-21c54ab2837e" />
 
 Roles:
 Richie Ronde: Front End
