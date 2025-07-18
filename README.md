@@ -83,21 +83,26 @@ correct, interconnected properly using imports, and running well, also has a err
 Screen shots of run of backend codes using driver code in main:
 
 FCFS:
+
 ![fcfs w error 1](https://github.com/user-attachments/assets/95273ce2-a97b-45db-b092-197534eb6bf3)
 ![fcfs w error 2](https://github.com/user-attachments/assets/fdc80374-2190-4694-8484-d2b80357f9db)
 
 SJF:
+
 ![SJF sample input](https://github.com/user-attachments/assets/5ccb0fec-9500-4982-86ae-e0db56be15fa)
 
 SRTF:
+
 ![srtf sample code 1](https://github.com/user-attachments/assets/25431db7-7938-448f-978c-12099a6fa80a)
 ![srtf sample code 2](https://github.com/user-attachments/assets/38dbd89f-4ea9-443f-9568-0ea51910949f)
 
 RR:
+
 ![ROund Robin 1](https://github.com/user-attachments/assets/baad0d14-2aea-41e7-9769-bfd12afb2270)
 ![ROund Robin 2](https://github.com/user-attachments/assets/fdadee8b-3246-4c47-9117-51ca6376817c)
 
 MLFQ:
+
 ![MLFQ sample](https://github.com/user-attachments/assets/a8349514-0fd3-4ff9-98d4-adf8f3dcb712)
 
 
