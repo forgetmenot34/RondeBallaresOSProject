@@ -1,104 +1,252 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package RoundRobin;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author ploba
- */
 import CoreFunctions.process;
-import CoreFunctions.ganttblock;
 import CoreFunctions.scheduler;
+import CoreFunctions.ganttblock;
 
-import java.util.*;
+import FirstComeFirstServe.fcfs;
+import ShortestJobFirst.sjf;
+import ShortestRemainingTimeFirst.srtf;
+import RoundRobin.roundrobin;
+import MultiLevelFeedbackQueue.mlfq;
 
-public class roundrobin implements scheduler {
-    private List<process> processes;
-    private List<ganttblock> ganttChart;
-    private int timeQuantum;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    @Override
-    public void setProcesses(List<process> processes) {
-        this.processes = new ArrayList<>();
-        for (process p : processes) {
-            p.remainingTime = p.burstTime;
-            p.startTime = -1; // unset
-            this.processes.add(p);
-        }
-        this.ganttChart = new ArrayList<>();
+public class SchedulerGUI extends JFrame {
+    private JComboBox<String> algorithmCombo;
+    private DefaultTableModel processTableModel;
+    private JTextArea outputArea;
+    private GanttChartPanel ganttPanel;
+
+    public SchedulerGUI() {
+        setTitle("CPU Scheduling Simulator");
+        setSize(900, 750);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        JPanel topPanel = new JPanel();
+        topPanel.setBackground(new Color(40, 75, 99));
+
+        algorithmCombo = new JComboBox<>(new String[]{
+            "First Come First Serve (FCFS)",
+            "Shortest Job First (SJF)",
+            "Shortest Remaining Time First (SRTF)",
+            "Round Robin (RR)",
+            "Multi-Level Feedback Queue (MLFQ)"
+        });
+
+        JButton addButton = new JButton("Add Process");
+        JButton simulateButton = new JButton("Simulate");
+        JButton clearButton = new JButton("Clear");
+
+        algorithmCombo.setBackground(Color.WHITE);
+        algorithmCombo.setForeground(Color.BLACK);
+        addButton.setBackground(new Color(76, 175, 80));
+        addButton.setForeground(Color.WHITE);
+        simulateButton.setBackground(new Color(33, 150, 243));
+        simulateButton.setForeground(Color.WHITE);
+        clearButton.setBackground(new Color(244, 67, 54));
+        clearButton.setForeground(Color.WHITE);
+
+        JLabel algorithmLabel = new JLabel("Select Algorithm:");
+        algorithmLabel.setForeground(Color.WHITE);
+
+        topPanel.add(algorithmLabel);
+        topPanel.add(algorithmCombo);
+        topPanel.add(addButton);
+        topPanel.add(simulateButton);
+        topPanel.add(clearButton);
+        add(topPanel, BorderLayout.NORTH);
+
+        processTableModel = new DefaultTableModel(new Object[]{"Process ID", "Arrival Time", "Burst Time"}, 0);
+        JTable processTable = new JTable(processTableModel);
+        processTable.setFillsViewportHeight(true);
+        JScrollPane tableScroll = new JScrollPane(processTable);
+        add(tableScroll, BorderLayout.CENTER);
+
+        ganttPanel = new GanttChartPanel();
+        JScrollPane ganttScroll = new JScrollPane(ganttPanel);
+        ganttScroll.setPreferredSize(new Dimension(900, 120));
+        ganttScroll.setBorder(BorderFactory.createTitledBorder("Gantt Chart"));
+
+        outputArea = new JTextArea();
+        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        outputArea.setEditable(false);
+        outputArea.setBackground(Color.BLACK);
+        outputArea.setForeground(new Color(0, 255, 128));
+        outputArea.setRows(10);
+        outputArea.setColumns(50);
+
+        JScrollPane outputScroll = new JScrollPane(outputArea);
+        outputScroll.setPreferredSize(new Dimension(800, 220));
+        outputScroll.setBorder(BorderFactory.createTitledBorder("Simulation Results"));
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(ganttScroll, BorderLayout.NORTH);
+        bottomPanel.add(outputScroll, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        addButton.addActionListener(e -> {
+            int row = processTableModel.getRowCount();
+            processTableModel.addRow(new Object[]{"P" + (row + 1), 0, 1});
+        });
+
+        simulateButton.addActionListener(e -> runSimulation());
+
+        clearButton.addActionListener(e -> {
+            processTableModel.setRowCount(0);
+            outputArea.setText("");
+            ganttPanel.setGanttChart(new ArrayList<>());
+        });
+
+        setVisible(true);
     }
 
-    @Override
-    public void simulate() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter time quantum for Round Robin: ");
-        timeQuantum = scanner.nextInt();
+    private void runSimulation() {
+        List<process> processes = new ArrayList<>();
 
-        int currentTime = 0;
-        Queue<process> queue = new LinkedList<>();
-        List<process> arrived = new ArrayList<>();
-        Set<process> finished = new HashSet<>();
+        try {
+            for (int i = 0; i < processTableModel.getRowCount(); i++) {
+                String id = processTableModel.getValueAt(i, 0).toString();
+                String atStr = processTableModel.getValueAt(i, 1).toString().trim().replaceFirst("^0+(?!$)", "");
+                String btStr = processTableModel.getValueAt(i, 2).toString().trim().replaceFirst("^0+(?!$)", "");
 
-        processes.sort(Comparator.comparingInt(p -> p.arrivalTime));
-        int index = 0;
+                int at = Integer.parseInt(atStr);
+                int bt = Integer.parseInt(btStr);
 
-        while (finished.size() < processes.size()) {
-            while (index < processes.size() && processes.get(index).arrivalTime <= currentTime) {
-                queue.add(processes.get(index));
-                arrived.add(processes.get(index));
-                index++;
+                processes.add(new process(id, at, bt));
             }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Arrival and Burst times must be valid integers.");
+            return;
+        }
 
-            if (queue.isEmpty()) {
-                currentTime++;
-                continue;
-            }
+        if (processes.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please add at least one process.");
+            return;
+        }
 
-            process current = queue.poll();
+        scheduler sched;
+        int selected = algorithmCombo.getSelectedIndex();
 
-            if (current.startTime == -1) {
-                current.startTime = currentTime;
-            }
+        switch (selected) {
+            case 0 -> sched = new fcfs();
+            case 1 -> sched = new sjf();
+            case 2 -> sched = new srtf();
+            case 3 -> {
+                sched = new roundrobin();
+                String tqStr = JOptionPane.showInputDialog(this, "Enter Time Quantum:", "1");
 
-            int execTime = Math.min(current.remainingTime, timeQuantum);
-            ganttChart.add(new ganttblock(current.id, currentTime, currentTime + execTime));
-
-            currentTime += execTime;
-            current.remainingTime -= execTime;
-
-            while (index < processes.size() && processes.get(index).arrivalTime <= currentTime) {
-                if (!arrived.contains(processes.get(index))) {
-                    queue.add(processes.get(index));
-                    arrived.add(processes.get(index));
+                if (tqStr == null || tqStr.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Time Quantum is required for Round Robin.");
+                    return;
                 }
-                index++;
+
+                try {
+                    int tq = Integer.parseInt(tqStr.trim());
+                    if (tq <= 0) {
+                        JOptionPane.showMessageDialog(this, "Time Quantum must be a positive integer.");
+                        return;
+                    }
+                    for (process p : processes) p.timeQuantum = tq;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid Time Quantum.");
+                    return;
+                }
+            }
+            case 4 -> sched = new mlfq();
+            default -> sched = new fcfs();
+        }
+
+        sched.setProcesses(processes);
+        sched.simulate();
+
+        List<ganttblock> gantt = sched.getGanttChart();
+        List<process> result = sched.getResultProcesses();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Gantt Chart:\n|");
+        for (ganttblock b : gantt) {
+            sb.append("  ").append(b.processId).append("  |");
+        }
+        sb.append("\n");
+
+        for (ganttblock b : gantt) {
+            sb.append(b.startTime).append("     ");
+        }
+        sb.append(gantt.get(gantt.size() - 1).endTime).append("\n\n");
+
+        sb.append(String.format("%-10s%-15s%-15s%-18s%-18s%-18s\n",
+                "Process", "Arrival Time", "Burst Time", "Completion Time", "Turnaround Time", "Response Time"));
+
+        double totalTAT = 0;
+        double totalRT = 0;
+        for (process p : result) {
+            int tat = p.finishTime - p.arrivalTime;
+            int rt = p.startTime - p.arrivalTime;
+            totalTAT += tat;
+            totalRT += rt;
+
+            sb.append(String.format("%-10s%-15d%-15d%-18d%-18d%-18d\n",
+                    p.id, p.arrivalTime, p.burstTime, p.finishTime, tat, rt));
+        }
+
+        sb.append(String.format("\nAverage Turnaround Time: %.2f\n", totalTAT / result.size()));
+        sb.append(String.format("Average Response Time: %.2f\n", totalRT / result.size()));
+
+        outputArea.setText(sb.toString());
+        ganttPanel.setGanttChart(gantt);
+    }
+
+    class GanttChartPanel extends JPanel {
+        private List<ganttblock> chart;
+
+        public void setGanttChart(List<ganttblock> chart) {
+            this.chart = chart;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (chart == null || chart.isEmpty()) return;
+
+            int blockWidth = 50;
+            int height = 40;
+            int x = 20;
+            int y = 30;
+
+            for (ganttblock block : chart) {
+                int width = blockWidth * (block.endTime - block.startTime);
+
+                g.setColor(new Color(173, 216, 230));
+                g.fillRect(x, y, width, height);
+
+                g.setColor(Color.BLACK);
+                g.drawRect(x, y, width, height);
+                g.drawString(block.processId, x + width / 2 - 10, y + 25);
+                g.drawString(String.valueOf(block.startTime), x - 5, y + height + 20);
+
+                x += width;
             }
 
-            if (current.remainingTime > 0) {
-                queue.add(current);
-            } else {
-                current.finishTime = currentTime;
-                current.turnaroundTime = current.finishTime - current.arrivalTime;
-                current.responseTime = current.startTime - current.arrivalTime;
-                finished.add(current);
+            if (!chart.isEmpty()) {
+                ganttblock last = chart.get(chart.size() - 1);
+                g.drawString(String.valueOf(last.endTime), x - 5, y + height + 20);
             }
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(1000, 100);
         }
     }
 
-    @Override
-    public List<ganttblock> getGanttChart() {
-        return ganttChart;
-    }
-
-    @Override
-    public List<process> getResultProcesses() {
-        return processes;
-    }
-
-    @Override
-    public String getName() {
-        return "Round Robin (RR)";
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(SchedulerGUI::new);
     }
 }
