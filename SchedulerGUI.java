@@ -13,6 +13,7 @@ import MultiLevelFeedbackQueue.mlfq;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SchedulerGUI extends JFrame {
@@ -158,7 +159,40 @@ public class SchedulerGUI extends JFrame {
                     return;
                 }
             }
-            case 4 -> sched = new mlfq();
+ case 4 -> {
+    mlfq mlfqScheduler = new mlfq();
+    sched = mlfqScheduler;
+
+    String tqInput = JOptionPane.showInputDialog(this,
+        "Enter time quanta for Q0, Q1, Q2, Q3 (comma-separated):", "4,8,12,1000");
+    if (tqInput == null || tqInput.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Time quanta required.");
+        return;
+    }
+
+    String allotmentInput = JOptionPane.showInputDialog(this,
+        "Enter time allotment per queue level:", "6");
+    if (allotmentInput == null || allotmentInput.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Time allotment required.");
+        return;
+    }
+
+    try {
+        int[] quanta = Arrays.stream(tqInput.split(","))
+            .map(String::trim).mapToInt(Integer::parseInt).toArray();
+        if (quanta.length != 4) {
+            JOptionPane.showMessageDialog(this, "Please enter exactly 4 comma-separated values.");
+            return;
+        }
+        int allotment = Integer.parseInt(allotmentInput.trim());
+
+        mlfqScheduler.setConfig(quanta, allotment);
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Invalid input. Use integers only.");
+        return;
+    }
+}
+
             default -> sched = new fcfs();
         }
 
@@ -202,60 +236,61 @@ public class SchedulerGUI extends JFrame {
         ganttPanel.setGanttChart(gantt);
     }
 
-class GanttChartPanel extends JPanel {
-    private List<ganttblock> chart;
+    class GanttChartPanel extends JPanel {
+        private List<ganttblock> chart;
 
-    public void setGanttChart(List<ganttblock> chart) {
-        this.chart = chart;
-        repaint();
+        public void setGanttChart(List<ganttblock> chart) {
+            this.chart = chart;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (chart == null || chart.isEmpty()) return;
+
+            int blockWidth = 50;
+            int height = 40;
+            int x = 20;
+            int y = 30;
+
+            for (ganttblock block : chart) {
+                int width = blockWidth * (block.endTime - block.startTime);
+
+                g.setColor(new Color(173, 216, 230));
+                g.fillRect(x, y, width, height);
+
+                g.setColor(Color.BLACK);
+                g.drawRect(x, y, width, height);
+                g.drawString(block.processId, x + width / 2 - 10, y + 25);
+                g.drawString(String.valueOf(block.startTime), x - 5, y + height + 20);
+
+                x += width;
+            }
+
+            if (!chart.isEmpty()) {
+                ganttblock last = chart.get(chart.size() - 1);
+                g.drawString(String.valueOf(last.endTime), x - 5, y + height + 20);
+            }
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            if (chart == null || chart.isEmpty()) {
+                return new Dimension(1000, 100);
+            }
+
+            int blockWidth = 50;
+            int totalWidth = 0;
+
+            for (ganttblock block : chart) {
+                totalWidth += blockWidth * (block.endTime - block.startTime);
+            }
+
+            return new Dimension(Math.max(1000, totalWidth + 40), 100);
+        }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (chart == null || chart.isEmpty()) return;
-
-        int blockWidth = 50;
-        int height = 40;
-        int x = 20;
-        int y = 30;
-
-        for (ganttblock block : chart) {
-            int width = blockWidth * (block.endTime - block.startTime);
-
-            g.setColor(new Color(173, 216, 230));
-            g.fillRect(x, y, width, height);
-
-            g.setColor(Color.BLACK);
-            g.drawRect(x, y, width, height);
-            g.drawString(block.processId, x + width / 2 - 10, y + 25);
-            g.drawString(String.valueOf(block.startTime), x - 5, y + height + 20);
-
-            x += width;
-        }
-
-        if (!chart.isEmpty()) {
-            ganttblock last = chart.get(chart.size() - 1);
-            g.drawString(String.valueOf(last.endTime), x - 5, y + height + 20);
-        }
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        if (chart == null || chart.isEmpty()) {
-            return new Dimension(1000, 100);
-        }
-
-        int blockWidth = 50;
-        int totalWidth = 0;
-
-        for (ganttblock block : chart) {
-            totalWidth += blockWidth * (block.endTime - block.startTime);
-        }
-
-        return new Dimension(Math.max(1000, totalWidth + 40), 100);
-    }
-}
     public static void main(String[] args) {
         SwingUtilities.invokeLater(SchedulerGUI::new);
     }
