@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package MultiLevelFeedbackQueue;
 
-/**
- *
- * @author ploba
- */
 import CoreFunctions.ganttblock;
 import CoreFunctions.process;
 import CoreFunctions.scheduler;
@@ -18,19 +10,28 @@ public class mlfq implements scheduler {
     private List<process> allProcesses;
     private List<ganttblock> ganttChart = new ArrayList<>();
     private List<process> completed = new ArrayList<>();
-
-    // 4 Queues: Q0 to Q3 (Q0 highest priority)
-    private final List<Queue<process>> queues = Arrays.asList(
+    private List<Queue<process>> queues = Arrays.asList(
             new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
 
-    private int[] timeQuanta = {4, 8, 12, Integer.MAX_VALUE}; // Round robin for Q0 to Q2, FCFS for Q3
-    private int currentTime = 0;
+    private int[] timeQuanta = new int[4]; // e.g., {4, 8, 12, 1000}
+    private int timeAllotment = 6;
+
+    public void setConfig(int[] quanta, int allotment) {
+        if (quanta == null || quanta.length != 4) {
+            throw new IllegalArgumentException("You must provide exactly 4 time quanta values.");
+        }
+        this.timeQuanta = quanta;
+        this.timeAllotment = allotment;
+    }
 
     @Override
     public void setProcesses(List<process> processes) {
-        this.allProcesses = new ArrayList<>();
+        allProcesses = new ArrayList<>();
         for (process p : processes) {
             p.remainingTime = p.burstTime;
+            p.level = 0;
+            p.allotted = 0;
+            p.startTime = -1; // Indicates not yet started
             allProcesses.add(p);
         }
     }
@@ -40,6 +41,8 @@ public class mlfq implements scheduler {
         allProcesses.sort(Comparator.comparingInt(p -> p.arrivalTime));
         int n = allProcesses.size();
         int arrived = 0;
+
+        int currentTime = allProcesses.isEmpty() ? 0 : allProcesses.get(0).arrivalTime;
 
         while (completed.size() < n) {
             // Add newly arrived processes to Q0
@@ -51,8 +54,8 @@ public class mlfq implements scheduler {
             process current = null;
             int level = -1;
 
-            // Pick the first non-empty queue
-            for (int i = 0; i < queues.size(); i++) {
+            // Find next process to run
+            for (int i = 0; i < 4; i++) {
                 if (!queues.get(i).isEmpty()) {
                     current = queues.get(i).poll();
                     level = i;
@@ -65,17 +68,21 @@ public class mlfq implements scheduler {
                 continue;
             }
 
-            if (current.startTime == 0 && current.remainingTime == current.burstTime) {
-                current.startTime = Math.max(currentTime, current.arrivalTime);
+            if (current.startTime == -1) {
+                current.startTime = currentTime;
             }
 
-            int execTime = Math.min(timeQuanta[level], current.remainingTime);
+            int tq = timeQuanta[level];
+            int allowed = Math.min(tq, timeAllotment - current.allotted);
+            int execTime = Math.min(allowed, current.remainingTime);
+
             ganttChart.add(new ganttblock(current.id + "(Q" + level + ")", currentTime, currentTime + execTime));
 
-            currentTime += execTime;
             current.remainingTime -= execTime;
+            current.allotted += execTime;
+            currentTime += execTime;
 
-            // Check for newly arrived processes during execution
+            // Add newly arrived during execution
             while (arrived < n && allProcesses.get(arrived).arrivalTime <= currentTime) {
                 queues.get(0).offer(allProcesses.get(arrived));
                 arrived++;
@@ -85,9 +92,13 @@ public class mlfq implements scheduler {
                 current.finishTime = currentTime;
                 completed.add(current);
             } else {
-                // Demote if not in Q3
-                if (level < 3) queues.get(level + 1).offer(current);
-                else queues.get(3).offer(current); // Stay in Q3
+                if (current.allotted >= timeAllotment && level < 3) {
+                    current.level = level + 1;
+                    current.allotted = 0;
+                    queues.get(level + 1).offer(current);
+                } else {
+                    queues.get(level).offer(current);
+                }
             }
         }
     }
@@ -107,4 +118,3 @@ public class mlfq implements scheduler {
         return "Multilevel Feedback Queue (MLFQ)";
     }
 }
-
