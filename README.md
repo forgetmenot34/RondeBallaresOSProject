@@ -117,18 +117,33 @@ SJF:
 SRTF:
 <img width="1919" height="1019" alt="Screenshot 2025-07-19 015019" src="https://github.com/user-attachments/assets/e59c6768-55aa-46fd-b4ad-5babaa46bc5f" />
 
+MLFQ:
+<img width="1919" height="1024" alt="Screenshot 2025-07-19 015059" src="https://github.com/user-attachments/assets/f301bd41-e5f8-4313-863e-21c54ab2837e" />
+
+
+
+
 Issues with code:
+
+(FIXED)
 RR:
 When entering Round Robin in the GUI, after entering time quantum in the GUI itself, it goes back to the terminal and asks for the time quantum the user just entered. 
 Other than that, the code works fine.
 
 ![Round Robin issues](https://github.com/user-attachments/assets/916ed9a3-b167-437c-872f-7bf127bfa360)
 
-MLFQ:
-<img width="1919" height="1024" alt="Screenshot 2025-07-19 015059" src="https://github.com/user-attachments/assets/f301bd41-e5f8-4313-863e-21c54ab2837e" />
+
+Deletion of the commit history of original main branch:
+
+During the transferring of files from original folder to another in Github, errors were made in the commmitting and pushing process, which duplicated and misplaced files. 
+We had to delete the original main branch and make a new one. Thankfully, we were able to preserve that folder and branch, and the original history of commits can still be seen there. 
+Current files are in new main branch, and original commit history is in old-main branch.
+
+
+
 
 Roles:
-Richie Ronde: Front End
+Richie Ronde: Front End 
 
 Dan Ballares: Back End
 
