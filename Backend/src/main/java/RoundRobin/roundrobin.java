@@ -24,7 +24,7 @@ public class roundrobin implements scheduler {
         this.processes = new ArrayList<>();
         for (process p : processes) {
             p.remainingTime = p.burstTime;
-            p.startTime = -1; // unset
+            p.startTime = -1; 
             this.processes.add(p);
         }
         this.ganttChart = new ArrayList<>();
